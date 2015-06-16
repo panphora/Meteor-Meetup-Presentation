@@ -1,4 +1,4 @@
-Part 1: Understanding the call stack, the event loop, the task queue, and how asyncronous functions work
+# Part 1: Understanding the call stack, the event loop, the task queue, and how asyncronous functions work
 
 First, some basic context. When you run your JS code, it is added to the task queue. Think of this as a todo list.
 
@@ -91,7 +91,7 @@ This is why, when you write blocking code, like a for loop that iterates over 10
 
 
 
-Part 2: A simple example of using fibers
+# Part 2: A simple example of using fibers
 
 You may have noticed that the asyncronous code in the last section got a little unwieldy. We're very used to thinking linearly, so when we have to write code that will be run "some time in the future" our abstractions can break down. We can also end up with a lot of nested callbacks, which makes it a little harder to think about what our code is doing.
 
@@ -175,9 +175,93 @@ There are a couple of reasons you might want to know about all of this. One is a
 The second reason you would want to know about fibers is because there is a massive ecosystem of npm modules that use asyncronous callbacks. And, because these aren't compatible with fibers, you can't use these modules without modifying them a little bit.
 
 
-Part 3: A simple example of using Meteor.wrapAsync()
+# Part 3: A simple example of using Meteor.wrapAsync()
 
-You will want to be able to use this function if you need to use an asyncronous function that's not already wrapped in a Meteor package.
+There is an excellect blog post by the Discover Meteor team called "Wrapping NPM Packages for Meteor". I highly recommend you check it out. I was going to do most of this talk on how to wrap the Mailgun NPM module, because I needed to be able to send attachments and the current build-in Email functionality doesn't support this. But they cover most of how to do that in that post, so I decided to talk more about the lower level stuff here.
+
+To wrap up, I want to show you a Meteor method that makes working with asyncronous code a lot easier. Not only does it use fibers under the hood, but it also binds the Meteor environment to that function, so you can access things like this.userId and this.connection.
+
+
+var Fiber = Npm.require('fibers');
+
+var scheduleWashioSync = Meteor.wrapAsync(scheduleWashio);
+var giveWashioClothesSync = Meteor.wrapAsync(giveWashioClothes);
+
+function doLaundryWithWashio () {
+  console.log('Doing laundry');
+
+  var clothes = gatherClothes();
+
+  // async
+  var isConfirmed = scheduleWashioSync('12pm');
+  console.log('Washio is: ', isConfirmed ? 'confirmed' : 'not confirmed');
+  
+  var cleanClothes = giveWashioClothesSync(clothes);
+
+  getCleanClothes(cleanClothes);
+}
+
+function gatherClothes () {
+  return ['shirt', 'pants', 'socks'];
+}
+
+function scheduleWashio (time, callback) {
+  // call callback when Washio arrives at house
+  console.log('Scheduling Washio');
+  
+  setTimeout(function () {
+    callback(null, true);
+  }, 3000);
+}
+
+function giveWashioClothes (clothes, callback) {
+  // call callback after clothes are cleaned
+  console.log('Giving Washio some clothes');
+  
+  setTimeout(function () {
+    callback(null, clothes.map(function (item) {return 'clean ' + item}));
+  }, 3000);
+}
+
+function getCleanClothes (cleanClothes) {
+  console.log('clean clothes: ' , cleanClothes.join(', '));
+}
+
+Fiber(function () {
+  doLaundryWithWashio();
+}).run();
+
+// yields to this
+Fiber(function () {
+  for (var i = 0; i < 10000; i++) {
+    if (i === 9999) {
+      console.log('for loop complete!');
+      debugger;
+    }
+  }
+}).run();
+
+
+thank you!
+
+check out smashingthingstogether.com and my brand new meteor app artisfy.com
+
+you can contact me on twitter at panphora or via email at david@storylog.com
+
+any questions?
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,3 +1,9 @@
+
+var Fiber = Npm.require('fibers');
+
+var scheduleWashioSync = Meteor.wrapAsync(scheduleWashio);
+var giveWashioClothesSync = Meteor.wrapAsync(giveWashioClothes);
+
 function doLaundryWithWashio () {
   console.log('Doing laundry');
 
@@ -22,7 +28,7 @@ function scheduleWashio (time, callback) {
   
   setTimeout(function () {
     callback(null, true);
-  }, 3000);
+  }, 5000);
 }
 
 function giveWashioClothes (clothes, callback) {
@@ -31,7 +37,7 @@ function giveWashioClothes (clothes, callback) {
   
   setTimeout(function () {
     callback(null, clothes.map(function (item) {return 'clean ' + item}));
-  }, 3000);
+  }, 5000);
 }
 
 function getCleanClothes (cleanClothes) {

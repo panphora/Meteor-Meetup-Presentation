@@ -1,6 +1,9 @@
+
+
 function doLaundryWithWashio () {
   var clothes = gatherClothes();
 
+  debugger;
   scheduleWashio('12pm', function () {
     giveWashioClothes(clothes, function (cleanClothes) {
       getCleanClothes(cleanClothes);
@@ -17,7 +20,7 @@ function scheduleWashio (time, callback) {
   
   setTimeout(function () {
     callback('confirmed');
-  }, 1000);
+  }, 5000);
 }
 
 function giveWashioClothes (clothes, callback) {
@@ -25,7 +28,7 @@ function giveWashioClothes (clothes, callback) {
 
   setTimeout(function () {
     callback(clothes.map(function (item) { return 'clean ' + item}));
-  }, 1000);
+  }, 5000);
 }
 
 function getCleanClothes (cleanClothes) {
@@ -34,4 +37,4 @@ function getCleanClothes (cleanClothes) {
 
 
 doLaundryWithWashio();
-console.log('do something else');
+console.log('do something else'); // a lot could happen here

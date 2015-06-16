@@ -1,3 +1,5 @@
+
+
 var Fiber = Npm.require('fibers');
 
 function doLaundryWithWashio () {

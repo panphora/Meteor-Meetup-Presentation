@@ -1,161 +1,65 @@
-Meteor.methods({
-  accomplishTodoList: function () {
-    doLaundry();
-    learnAboutMeteor();
-    goForAWalk();
-    buyBreadAndMilk();
-    watchGameOfThrones();
-    return 'done!';
-  }
-});
+var Fiber = Npm.require('fibers');
 
+function doLaundryWithWashio () {
+  console.log('Doing laundry');
 
-
-
-
-
-
-
-
-
-function learnAboutMeteor () {
-  var knowledge = readDiscoverMeteorBlog();
-  knowledge += readOfficialDocs();
-  writeABlogPost(knowledge);
-}
-
-function doLaundry () {
-  debugger;
   var clothes = gatherClothes();
-  var bag = putClothesInBag(clothes);
-  var quarters = findQuarters();
-  var direction = getDirectionToward('laundromat');
 
-  goForAWalk(direction);
-  putQuartersAndClothesIntoWashingMachine(quarters, clothes);
-  //etc
-}
+  debugger; //look at call stack
+  var isConfirmed = scheduleWashio('12pm');
+  console.log('Washio is: ', isConfirmed ? 'confirmed' : 'not confirmed');
+  debugger;
 
-function goForAWalk (isDressed, direction) {
-  if (!isDressed) {
-    getDressed();
-  }
+  var cleanClothes = giveWashioClothes(clothes);
 
-  goOutside();
-
-  if (!direction) {
-    direction = pickADirectionAtRandom();
-  }
-
-  walk(direction);
-}
-
-function buyBreadAndMilk (directionTowardStore) {
-  goForAWalk(directionTowardStore);
-  getBreadAndMilk();
-  payForBreadAndMilk();
-}
-
-function watchGameOfThrones () {
-  goToHboNow();
-  clickOnGameOfThrones();
-}
-
-function findQuarters () {
-  var quarters = gatherQuartersFromHouse();
-
-  if (quarters < 33) {
-    quarters = getQuartersFromBank();
-  }
-
-  return quarters
-}
-
-function getQuartersFromBank () {
-  goToBank();
-
-  //goToATM();
-  //typeInPasscode(2255);
-  //retreiveMoney();
-  //etc
-  
-  return 40;
-}
-
-function gatherQuartersFromHouse () {
-  return 2;
-}
-
-function getDirectionToward (place) {
-  switch (place) {
-    case 'laundromat':
-      return 'east'
-      break;
-    case 'bank':
-      return 'west';
-      break;
-  }
-}
-
-function goToBank () {
-  var direction = getDirectionToward('bank');
-  goForAWalk(true, direction);
-  //etc
-}
-
-function readDiscoverMeteorBlog () {
-
-}
-
-function readOfficialDocs () {
-  
-}
-
-function writeABlogPost () {
-  
+  getCleanClothes(cleanClothes);
 }
 
 function gatherClothes () {
+  return ['shirt', 'pants', 'socks'];
+}
+
+function scheduleWashio (time) {
+  // call callback when Washio arrives at house
+  console.log('Scheduling Washio');
+
+  var fiber = Fiber.current;
   
+  setTimeout(function () {
+    fiber.run(true);
+  }, 3000);
+
+  return Fiber.yield();
 }
 
-function putClothesInBag () {
-  // unfinished, todo
-}
+function giveWashioClothes (clothes) {
+  // call callback after clothes are cleaned
+  console.log('Giving Washio some clothes');
 
-
-function putQuartersAndClothesIntoWashingMachine (quarters, clothes) {
-  // unfinished, todo
-}
-
-function getDressed () {
+  var fiber = Fiber.current;
   
+  setTimeout(function () {
+    fiber.run(clothes.map(function (item) {return 'clean ' + item}));
+  }, 3000);
+
+  return Fiber.yield();
 }
 
-function goOutside () {
-  
+function getCleanClothes (cleanClothes) {
+  console.log('clean clothes: ' , cleanClothes.join(', '));
 }
 
-function pickADirectionAtRandom () {
-  
-}
 
-function walk () {
-  
-}
+Fiber(function () {
+  doLaundryWithWashio();
+}).run();
 
-function getBreadAndMilk () {
-  
-}
-
-function payForBreadAndMilk () {
-  
-}
-
-function goToHboNow () {
-  
-}
-
-function clickOnGameOfThrones () {
-  
-}
+// yields to this
+Fiber(function () {
+  for (var i = 0; i < 10000; i++) {
+    if (i === 9999) {
+      console.log('for loop complete!');
+      debugger;
+    }
+  }
+}).run();

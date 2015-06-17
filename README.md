@@ -10,6 +10,7 @@ When a function in your code calls another function, think of this as a Meeseeks
 
 Let me give you an example of this.
 
+```javascript
 function doLaundry () {
   var quarters = getQuarters();
 
@@ -39,6 +40,7 @@ function getQuartersFromBank () {
 function walkToBank () {
   // ...
 }
+```
 
 As you can see, we can end up doing a lot of things that we weren't intending to do in the first place, like going to the bank when all we wanted to do was do laundry.
 
@@ -48,6 +50,7 @@ This is why we use asyncronous functions. Asyncronous functions allow us to pass
 
 Let me give you an example of this in code.
 
+```javascript
 function doLaundryWithWashio () {
   var clothes = gatherClothes();
 
@@ -81,7 +84,7 @@ function giveWashioClothes (clothes, callback) {
 function getCleanClothes (cleanClothes) {
   console.log('clean clothes: ', cleanClothes.join(', '));
 }
-
+```
 
 As you can see here, we have some callbacks that take some time to return. The callback function for scheduleWashio, for example, won't return for 1 second. This will give us time to do other things and won't block the rest of out code. 
 
@@ -103,6 +106,7 @@ Here's an example of a fiber, using our previous code as a template.
 
 var Fiber = Npm.require('fibers');
 
+```javascript
 function doLaundryWithWashio () {
   console.log('Doing laundry');
 
@@ -166,7 +170,7 @@ Fiber(function () {
     }
   }
 }).run();
-
+```
 
 As you can see, this can get a bit complicated. Luckily, all Meteor server code runs in Fibers automatically, so they take care of the heavy lifting. If you've ever wondered why you can return a result from the database without using a callback, it's because all of the database functions use Fibers under the hood.
 
@@ -182,6 +186,7 @@ There is an excellect blog post by the Discover Meteor team called "Wrapping NPM
 To wrap up, I want to show you a Meteor method that makes working with asyncronous code a lot easier. Not only does it use fibers under the hood, but it also binds the Meteor environment to that function, so you can access things like this.userId and this.connection.
 
 
+```javascript
 var Fiber = Npm.require('fibers');
 
 var scheduleWashioSync = Meteor.wrapAsync(scheduleWashio);
@@ -240,7 +245,7 @@ Fiber(function () {
     }
   }
 }).run();
-
+```
 
 thank you!
 

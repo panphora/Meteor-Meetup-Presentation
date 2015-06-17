@@ -1,11 +1,13 @@
 
 
 function doLaundryWithWashio () {
+  // "Washio" is a service that does laundry for you
   var clothes = gatherClothes();
 
-  debugger;
   scheduleWashio('12pm', function () {
+    // washio arrives for initial pick-up
     giveWashioClothes(clothes, function (cleanClothes) {
+      //washio arrives for drop-off
       getCleanClothes(cleanClothes);
     });
   });
@@ -17,6 +19,7 @@ function gatherClothes () {
 
 function scheduleWashio (time, callback) {
   // call callback when Washio arrives at house
+  // 5 seconds here for demonstration purposes
   
   setTimeout(function () {
     callback('confirmed');
@@ -25,6 +28,7 @@ function scheduleWashio (time, callback) {
 
 function giveWashioClothes (clothes, callback) {
   // call callback after clothes are cleaned
+  // 5 seconds here for demonstration purposes
 
   setTimeout(function () {
     callback(clothes.map(function (item) { return 'clean ' + item}));
@@ -35,6 +39,7 @@ function getCleanClothes (cleanClothes) {
   console.log('clean clothes: ', cleanClothes.join(', '));
 }
 
-
 doLaundryWithWashio();
-console.log('do something else'); // a lot could happen here
+
+// a lot could happen while the above async function is running
+console.log('do something else'); 

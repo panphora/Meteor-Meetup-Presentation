@@ -1,10 +1,11 @@
 
 
 function doLaundry () {
-  debugger;
   var quarters = getQuarters();
 
-  // ...
+  // gatherClothes();
+  // goToLaundromat();
+  // putQuartersInMachine();
   // etc.
 }
 

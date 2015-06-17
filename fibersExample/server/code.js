@@ -7,10 +7,11 @@ function doLaundryWithWashio () {
 
   var clothes = gatherClothes();
 
-  debugger; //look at call stack
+  debugger; //look at the call stack here
   var isConfirmed = scheduleWashio('12pm');
   console.log('Washio is: ', isConfirmed ? 'confirmed' : 'not confirmed');
-  debugger;
+
+  debugger; //look at the terminal, the for loop at the bottom of this code should have completed before the "Washio is: confirmed" string gets printed out
 
   var cleanClothes = giveWashioClothes(clothes);
 
@@ -61,7 +62,6 @@ Fiber(function () {
   for (var i = 0; i < 10000; i++) {
     if (i === 9999) {
       console.log('for loop complete!');
-      debugger;
     }
   }
 }).run();

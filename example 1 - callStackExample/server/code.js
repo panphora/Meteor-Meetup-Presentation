@@ -29,6 +29,7 @@ function getQuartersFromBank () {
 }
 
 function walkToBank () {
+  debugger;
   // ...
 }
 

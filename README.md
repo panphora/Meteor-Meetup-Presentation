@@ -1,3 +1,5 @@
+This is a blog post I made, based on a presentation I gave at a Meteor meetup in early 2015.
+
 ## Part 1: 
 
 ### The call stack, the event loop, the task queue, and how asyncronous functions work<br><br>
